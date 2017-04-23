@@ -18,7 +18,6 @@ pool.getConnection(function (err, connection) {
 	connection.release();
 });
 
-
 // Authentication and Authorization Middleware
 var auth = function (req, res, next) {
 	if (req.session && req.session.logged_in)
@@ -58,7 +57,7 @@ router.post('/login', function (req, res) {
 			//`results` -> array of users
 			for (let i = 0; i < results.length; i++) {
 				if (results[i]['username'].toLowerCase() === req.body.username.toLowerCase()) {
-					if(results[i]['password'] === '') {
+					if (results[i]['password'] === '') {
 						//FW user hasn't logged in in a *looong* time,
 						//they must go to the main FW site to rehash their password using PHP
 						res.json({
@@ -68,14 +67,12 @@ router.post('/login', function (req, res) {
 						});
 					}
 
-
-
 					//bcrypt built into PHP includes a different prefix
 					//solution derived from: http://stackoverflow.com/questions/23015043/verify-password-hash-in-nodejs-which-was-generated-in-php
 					var db_hash = results[i]['password'];
-                    db_hash = db_hash.replace(/^\$2y(.+)$/i, '\$2a$1');
-                    bcrypt.compare(req.body.password, db_hash, function(err, good) {
-                        if(good) {
+					db_hash = db_hash.replace(/^\$2y(.+)$/i, '\$2a$1');
+					bcrypt.compare(req.body.password, db_hash, function (err, good) {
+						if (good) {
 							//If good password
 							req.session.user = results[i]['username'];
 							req.session.logged_in = true;
@@ -84,8 +81,7 @@ router.post('/login', function (req, res) {
 								reason: 'goodpassword',
 								description: 'Login succesful'
 							});
-                        }
-						else {
+						} else {
 							//If bad password
 							res.json({
 								status: 'failed',
@@ -93,7 +89,7 @@ router.post('/login', function (req, res) {
 								description: 'Your password doesn\'t match the database'
 							})
 						}
-                    });
+					});
 				}
 			}
 
