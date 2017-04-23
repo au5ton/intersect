@@ -20,7 +20,7 @@ pool.getConnection(function (err, connection) {
 
 // Authentication and Authorization Middleware
 var auth = function (req, res, next) {
-	if (req.session && req.session.logged_in)
+	if (req.session && req.session.logged_in === true)
 		return next();
 	else
 		return res.sendStatus(401);
@@ -45,7 +45,11 @@ router.get('/about', function (req, res) {
 });
 
 router.get('/private', auth, function (req, res) {
-	res.send('welcome to the underground');
+	res.send('welcome to the underground, '+req.session.username+' !');
+});
+
+router.get('/echo', function(req, res) {
+	res.send(JSON.stringify(req.session));
 })
 
 module.exports = router

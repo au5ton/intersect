@@ -82,7 +82,7 @@ router.get('/login', function (req, res) {
 					bcrypt.compare(req.query.password, db_hash, function (err, good) {
 						if (good) {
 							//If good password
-							req.session.user = results[i]['username'];
+							req.session.username = results[i]['username'];
 							req.session.logged_in = true;
 							res.json({
 								status: 'success',
