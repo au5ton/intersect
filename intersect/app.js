@@ -27,12 +27,12 @@ app.use(session({
 app.use(sassMiddleware({
     /* Options */
     src: path.join(__dirname, 'scss'),
-    dest: path.join(__dirname, 'public'),
+    dest: path.join(__dirname, 'public', 'css'),
     debug: true,
     outputStyle: 'compressed',
     prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="css/style.css"/>
 }));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/api', apirouter);
 app.use('/', pagerouter);
 

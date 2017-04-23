@@ -20,28 +20,36 @@ pool.getConnection(function (err, connection) {
 
 // Authentication and Authorization Middleware
 var auth = function (req, res, next) {
+
+	const publicly_accessible = [
+		'/login',
+		'public/img/login.jpg'
+	];
+
 	if (req.session && req.session.logged_in === true)
 		return next();
+	else if(publicly_accessible.indexOf(req.url) >= 0) {
+		return next();
+	}
 	else
-		return res.sendStatus(401);
+		//return res.sendStatus(401);
+		return next();
 };
 
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
-	console.log('Time: ', Date.now())
-	next()
-})
+
 // define the home page route
-router.get('/', function (req, res) {
-	req.session.logged_in = false;
-	res.send('Birds home page');
-})
+router.get('/', auth, function (req, res) {
+	res.send('Birds home page, \nlogged in:'+req.session.logged_in);
+});
+
+// define the home page route
+router.get('/login', function (req, res) {
+	res.render('pages/login');
+});
+
 // define the about route
-router.get('/about', function (req, res) {
-	if(req.session.logged_in === undefined) {
-		res.redirect('/');
-	}
-	res.send('About birds');
+router.get('/about', auth, function (req, res) {
+	res.send('About birds, \nlogged in:'+req.session.logged_in);
 });
 
 router.get('/private', auth, function (req, res) {
