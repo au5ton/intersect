@@ -1,3 +1,0 @@
-//stdlib
-
-window.x = {};
