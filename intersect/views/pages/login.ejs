@@ -3,15 +3,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <% include ../partials/head %>
-    <link rel="stylesheets" href="css/login.css">
+    <title>FWT * Login</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
-<body>
+<body class="blue-grey darken-4">
+    <div class="valign-wrap">
 
-    <div class="container blue-grey darken-4">
+		<div class="login-box noselect code">
+			<img class="logo" src="/img/login.png"><br>
+			Move along.<br>
+			<br> Username: <input type="text" placeholder=" "></input><br>
+			Password: <input type="password" placeholder=" "></input><br>
+			<br>
+			<input type="button" value="Login"></input><input type="button" value="Register"></input>
+		</div>
+	</div>
+    <script src="/js/lib/fetch.js"></script>
+    <script>
 
-    </div>
 
-    <script data-main="public/js/login" src="public/js/require.js"></script>
+
+    </script>
 </body>
 </html>

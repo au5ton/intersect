@@ -6,6 +6,7 @@ var path = require('path');
 var sassMiddleware = require('node-sass-middleware');
 var apirouter = require('./routes/api');
 var pagerouter = require('./routes/pages');
+var filter = require('./routes/filter');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var client = require('au5ton-logger');
@@ -14,7 +15,7 @@ var client = require('au5ton-logger');
 app.set('view engine', 'ejs');
 
 // middleware :)
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
@@ -24,6 +25,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(filter.auth);
 app.use(sassMiddleware({
     /* Options */
     src: path.join(__dirname, 'scss'),
