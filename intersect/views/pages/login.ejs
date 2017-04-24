@@ -2,27 +2,101 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>FWT * Login</title>
-    <link rel="stylesheet" href="/css/login.css">
+	<title>FWT * Login</title>
+	<link rel="stylesheet" href="/css/login.css">
 </head>
+
 <body class="blue-grey darken-4">
-    <div class="valign-wrap">
+	<div class="valign-wrap">
 
 		<div class="login-box noselect code">
-			<img class="logo" src="/img/login.png"><br>
-			Move along.<br>
-			<br> Username: <input type="text" placeholder=" "></input><br>
-			Password: <input type="password" placeholder=" "></input><br>
+			<img class="logo" src="/img/login.gif"><br> Move along.<br>
+			<br> Username: <input type="text" placeholder=" "></input><br> Password: <input type="password" placeholder=" "></input><br>
 			<br>
 			<input type="button" value="Login"></input><input type="button" value="Register"></input>
+			<br><br>
+			<span id="notification"></span>
 		</div>
 	</div>
-    <script src="/js/lib/fetch.js"></script>
-    <script>
+	<script src="/js/lib/fetch.js"></script>
+	<script>
+        var inUsername = document.querySelector('input[type=\'Text\']');
+        var inPassword = document.querySelector('input[type=\'Password\']');
+		var btnLogin = document.querySelector('input[value=\'Login\']');
+		var btnRegister = document.querySelector('input[value=\'Register\']');
+		var notification = document.getElementById('notification');
 
+        var doLogin = function (event) {
+			setLoading();
+			fetch('/api/login', {
+				method: 'POST',
+				body: JSON.stringify({
+                    username: inUsername.value,
+                    password: inPassword.value
+                }),
+				headers: {
+					'Content-Type': 'application/json'
+				},
+                credentials: 'same-origin',
+			}).then(function (body) {
+				return body.json()
+			}, function (error) {
+				error.message //=> String
+			}).then(function(data) {
+                if(data.status === 'failed') {
+                    setError('('+data.reason+') '+data.description);
+                    //do nothing, wait for another attempt
+                }
+                else if(data.status === 'success'){
+                    setConfirmation(data.description);
+                    setTimeout(function(){
+                        window.location = '/'; //Redirect to homepage
+                    },1000);
+                }
+            })
+		};
 
+		btnLogin.addEventListener('click', doLogin);
+        inUsername.addEventListener('keyup', function(event) {
+            if(event.key === 'Enter') {
+                inPassword.focus();
+            }
+        });
+        inPassword.addEventListener('keyup', function(event) {
+            if(event.key === 'Enter') {
+                doLogin(event);
+            }
+        });
+		btnRegister.addEventListener('click', function (event) {
+			setWarning('Register on the Fluff World site first.');
+		});
 
-    </script>
+		var setError = function (str) {
+			notification.setAttribute('class', 'error');
+			notification.innerHTML = str;
+			setTimeout(clearNotification, 5000);
+		};
+		var setWarning = function (str) {
+			notification.setAttribute('class', 'warning');
+			notification.innerHTML = str;
+			setTimeout(clearNotification, 5000);
+		};
+        var setConfirmation = function(str) {
+            notification.setAttribute('class', 'confirmation');
+            notification.innerHTML = str;
+			setTimeout(clearNotification, 5000);
+        }
+		var setLoading = function () {
+			notification.innerHTML = '<img src="/img/loading.gif">';
+			notification.setAttribute('class', 'loading');
+		};
+		var clearNotification = function () {
+			notification.removeAttribute('class');
+			notification.innerHTML = '';
+		};
+	</script>
 </body>
+
 </html>

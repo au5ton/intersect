@@ -5,8 +5,12 @@ module.exports = {
     		'/login',
     		'/img/login.jpg',
             '/img/login.png',
+            '/img/login.gif',
     		'/css/login.css',
             '/js/lib/fetch.js',
+            '/img/loading.gif',
+            '/api/login',
+            '/favicon.ico',
             '/echo'
     	];
 

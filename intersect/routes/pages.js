@@ -25,7 +25,7 @@ pool.getConnection(function (err, connection) {
 
 // define the home page route
 router.get('/', function (req, res) {
-	res.send('Birds home page, \nlogged in:'+req.session.logged_in);
+	res.send('Welcome back, '+req.session.username+'!');
 });
 
 // define the home page route

@@ -1,5 +1,5 @@
 body {
-    background: #1c1c1c;
+    background: #000;
     margin: 0;
 }
 
@@ -52,6 +52,8 @@ input[type='button'] {
     color: #0f0;
     font-family: monospace;
     transition: all 0.25s;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 input[type='button']:hover {
@@ -83,4 +85,45 @@ input[type='button']:active {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+#notification {
+    transition: all 1s;
+    font-size: 0.8em;
+    opacity: 0;
+
+    &.loading {
+        opacity: 1;
+        img {
+            width: 38px;
+            height: 38px;
+        }
+    }
+    &.warning {
+        font-size: 0.8em;
+        font-weight: 700;
+        color: gold;
+        opacity: 1;
+        &::before {
+            content: '⚠️ ';
+        }
+    }
+    &.error {
+        font-size: 0.8em;
+        font-weight: 700;
+        color: rgb(236, 94, 74);
+        opacity: 1;
+        &::before {
+            content: '⛔️ ';
+        }
+    }
+    &.confirmation {
+        font-size: 0.8em;
+        font-weight: 700;
+        //color: rgb(236, 94, 74);
+        opacity: 1;
+        &::before {
+            content: '✅ ';
+        }
+    }
 }

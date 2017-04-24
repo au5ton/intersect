@@ -41,9 +41,9 @@ router.get('/about', function (req, res) {
 });
 
 //If a POST request is sent to /api/login
-router.get('/login', function (req, res) {
+router.post('/login', function (req, res) {
 
-	if(req.query.username === undefined || req.query.password === undefined) {
+	if(req.body.username === undefined || req.body.password === undefined) {
 		res.json({
 			status: 'failed',
 			reason: 'insufficientdata',
@@ -64,7 +64,7 @@ router.get('/login', function (req, res) {
 
 			//`results` -> array of users
 			for (let i = 0; i < results.length; i++) {
-				if (results[i]['username'].toLowerCase() === req.query.username.toLowerCase()) {
+				if (results[i]['username'].toLowerCase() === req.body.username.toLowerCase()) {
 					if (results[i]['password'] === '') {
 						//FW user hasn't logged in in a *looong* time,
 						//they must go to the main FW site to rehash their password using PHP
@@ -79,7 +79,7 @@ router.get('/login', function (req, res) {
 					//solution derived from: http://stackoverflow.com/questions/23015043/verify-password-hash-in-nodejs-which-was-generated-in-php
 					var db_hash = results[i]['password'];
 					db_hash = db_hash.replace(/^\$2y(.+)$/i, '\$2a$1');
-					bcrypt.compare(req.query.password, db_hash, function (err, good) {
+					bcrypt.compare(req.body.password, db_hash, function (err, good) {
 						if (good) {
 							//If good password
 							req.session.username = results[i]['username'];
